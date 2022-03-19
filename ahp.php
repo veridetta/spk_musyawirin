@@ -1,15 +1,15 @@
 <?php
 
-function ahp_get_matrik_kriteria($id_kriteria){
+function ahp_get_matrik_kriteria($id_kriteria,$connect){
 	for($i=0;$i<count($id_kriteria);$i++){
 		for($ii=0;$ii<count($id_kriteria);$ii++){
 			if($i==$ii){
 				$matrik[$i][$ii]=1;
 			}else{
 				if($i < $ii){
-					$q=mysql_query("select nilai from nilai_kriteria where id_kriteria_1='".$id_kriteria[$i]."' and id_kriteria_2='".$id_kriteria[$ii]."'");
-					if(mysql_num_rows($q)>0){
-						$h=mysql_fetch_array($q);
+					$q=mysqli_query($connect, "select nilai from nilai_kriteria where id_kriteria_1='".$id_kriteria[$i]."' and id_kriteria_2='".$id_kriteria[$ii]."'");
+					if(mysqli_num_rows($q)>0){
+						$h=mysqli_fetch_array($q);
 						$nilai=$h['nilai'];
 						$matrik[$i][$ii]=$nilai;
 						$matrik[$ii][$i]=round((1/$nilai),3);
@@ -23,16 +23,16 @@ function ahp_get_matrik_kriteria($id_kriteria){
 	}
 	return $matrik;
 }
-function ahp_get_matrik_supplier($id_kriteria, $id_supplier){
+function ahp_get_matrik_supplier($id_kriteria, $id_supplier,$connect){
 	for($i=0;$i<count($id_supplier);$i++){
 		for($ii=0;$ii<count($id_supplier);$ii++){
 			if($i==$ii){
 				$matrik[$i][$ii]=1;
 			}else{
 				if($i < $ii){
-					$q=mysql_query("select nilai from nilai_supplier where id_kriteria='".$id_kriteria."' and id_supplier_1='".$id_supplier[$i]."' and id_supplier_2='".$id_supplier[$ii]."'");
-					if(mysql_num_rows($q)>0){
-						$h=mysql_fetch_array($q);
+					$q=mysqli_query($connect, "select nilai from nilai_supplier where id_kriteria='".$id_kriteria."' and id_supplier_1='".$id_supplier[$i]."' and id_supplier_2='".$id_supplier[$ii]."'");
+					if(mysqli_num_rows($q)>0){
+						$h=mysqli_fetch_array($q);
 						$nilai=$h['nilai'];
 						$matrik[$i][$ii]=$nilai;
 						$matrik[$ii][$i]=round((1/$nilai),3);
@@ -46,16 +46,16 @@ function ahp_get_matrik_supplier($id_kriteria, $id_supplier){
 	}
 	return $matrik;
 }
-function ahp_get_matrik_kriteria_produk($id_kriteria_produk){
+function ahp_get_matrik_kriteria_produk($id_kriteria_produk,$connect){
 	for($i=0;$i<count($id_kriteria_produk);$i++){
 		for($ii=0;$ii<count($id_kriteria_produk);$ii++){
 			if($i==$ii){
 				$matrik[$i][$ii]=1;
 			}else{
 				if($i < $ii){
-					$q=mysql_query("select nilai from nilai_kriteria_produk where id_kriteria_produk_1='".$id_kriteria_produk[$i]."' and id_kriteria_produk_2='".$id_kriteria_produk[$ii]."'");
-					if(mysql_num_rows($q)>0){
-						$h=mysql_fetch_array($q);
+					$q=mysqli_query($connect, "select nilai from nilai_kriteria_produk where id_kriteria_produk_1='".$id_kriteria_produk[$i]."' and id_kriteria_produk_2='".$id_kriteria_produk[$ii]."'");
+					if(mysqli_num_rows($q)>0){
+						$h=mysqli_fetch_array($q);
 						$nilai=$h['nilai'];
 						$matrik[$i][$ii]=$nilai;
 						$matrik[$ii][$i]=round((1/$nilai),3);
@@ -69,16 +69,16 @@ function ahp_get_matrik_kriteria_produk($id_kriteria_produk){
 	}
 	return $matrik;
 }
-function ahp_get_matrik_produk($id_kriteria_produk, $id_produk){
+function ahp_get_matrik_produk($id_kriteria_produk, $id_produk,$connect){
 	for($i=0;$i<count($id_produk);$i++){
 		for($ii=0;$ii<count($id_produk);$ii++){
 			if($i==$ii){
 				$matrik[$i][$ii]=1;
 			}else{
 				if($i < $ii){
-					$q=mysql_query("select nilai from nilai_produk where id_kriteria_produk='".$id_kriteria_produk."' and id_produk_1='".$id_produk[$i]."' and id_produk_2='".$id_produk[$ii]."'");
-					if(mysql_num_rows($q)>0){
-						$h=mysql_fetch_array($q);
+					$q=mysqli_query($connect, "select nilai from nilai_produk where id_kriteria_produk='".$id_kriteria_produk."' and id_produk_1='".$id_produk[$i]."' and id_produk_2='".$id_produk[$ii]."'");
+					if(mysqli_num_rows($q)>0){
+						$h=mysqli_fetch_array($q);
 						$nilai=$h['nilai'];
 						$matrik[$i][$ii]=$nilai;
 						$matrik[$ii][$i]=round((1/$nilai),3);
@@ -90,6 +90,9 @@ function ahp_get_matrik_produk($id_kriteria_produk, $id_produk){
 			}
 		}
 	}
+	//echo "<br> -->> Matrik<br> ";
+	//print_r($matrik);
+	//echo "<br>";
 	return $matrik;
 }
 function ahp_get_jumlah_kolom($matrik){
@@ -107,6 +110,9 @@ function ahp_get_normalisasi($matrik, $jumlah_kolom){
 			$matrik_normalisasi[$i][$ii] = round( $matrik[$i][$ii] / $jumlah_kolom[$ii] , 3 );
 		}
 	}
+	//echo "<br> -->> Matrik<br> ";
+	//print_r($matrik_normalisasi);
+	//echo "<br>";
 	return $matrik_normalisasi;
 }
 function ahp_get_eigen($matrik_normalisasi){

@@ -12,23 +12,23 @@ if(isset($_POST['save'])){
 		$error='Masih ada beberapa kesalahan. Silahkan periksa lagi form di bawah ini.';
 	}else{
 		if($action=='add'){
-			if(mysql_num_rows(mysql_query("select * from kriteria where kode='".$kode."'"))>0){
+			if(mysqli_num_rows(mysqli_query($connect,"select * from kriteria where kode='".$kode."'"))>0){
 				$error='kode sudah terdaftar. Silahkan gunakan kode yang lain.';
 			}else{
 				$q="insert into kriteria(kode, nama) values('".$kode."', '".$nama."')";
-				mysql_query($q);
+				mysqli_query($connect,$q);
 				exit("<script>location.href='".$link_list."';</script>");
 			}
 		}
 		if($action=='edit'){
-			$q=mysql_query("select * from kriteria where id_kriteria='".$id."'");
-			$h=mysql_fetch_array($q);
+			$q=mysqli_query($connect,"select * from kriteria where id_kriteria='".$id."'");
+			$h=mysqli_fetch_array($q);
 			$kode_tmp=$h['kode'];
-			if(mysql_num_rows(mysql_query("select * from kriteria where kode='".$kode."' and kode<>'".$kode_tmp."'"))>0){
+			if(mysqli_num_rows(mysqli_query($connect,"select * from kriteria where kode='".$kode."' and kode<>'".$kode_tmp."'"))>0){
 				$error='kode sudah terdaftar. Silahkan gunakan kode yang lain.';
 			}else{
 				$q="update kriteria set kode='".$kode."', nama='".$nama."' where id_kriteria='".$id."'";
-				mysql_query($q);
+				mysqli_query($connect,$q);
 				exit("<script>location.href='".$link_list."';</script>");
 			}
 		}
@@ -38,14 +38,14 @@ if(isset($_POST['save'])){
 	if(empty($_GET['action'])){$action='add';}else{$action=$_GET['action'];}
 	if($action=='edit'){
 		$id=$_GET['id'];
-		$q=mysql_query("select * from kriteria where id_kriteria='".$id."'");
-		$h=mysql_fetch_array($q);
+		$q=mysqli_query($connect,"select * from kriteria where id_kriteria='".$id."'");
+		$h=mysqli_fetch_array($q);
 		$kode=$h['kode'];
 		$nama=$h['nama'];
 	}
 	if($action=='delete'){
 		$id=$_GET['id'];
-		mysql_query("delete from kriteria where id_kriteria='".$id."'");
+		mysqli_query($connect,"delete from kriteria where id_kriteria='".$id."'");
 		exit("<script>location.href='".$link_list."';</script>");
 	}
 }

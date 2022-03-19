@@ -12,23 +12,23 @@ if(isset($_POST['save'])){
 		$error='Masih ada beberapa kesalahan. Silahkan periksa lagi form di bawah ini.';
 	}else{
 		if($action=='add'){
-			if(mysql_num_rows(mysql_query("select * from kriteria_produk where kode_kriteria_produk='".$kode_kriteria_produk."'"))>0){
+			if(mysqli_num_rows(mysqli_query($connect,"select * from kriteria_produk where kode_kriteria_produk='".$kode_kriteria_produk."'"))>0){
 				$error='kode sudah terdaftar. Silahkan gunakan kode yang lain.';
 			}else{
 				$q="insert into kriteria_produk(kode_kriteria_produk, nama_kriteria_produk) values('".$kode_kriteria_produk."', '".$nama_kriteria_produk."')";
-				mysql_query($q);
+				mysqli_query($connect,$q);
 				exit("<script>location.href='".$link_list."';</script>");
 			}
 		}
 		if($action=='edit'){
-			$q=mysql_query("select * from kriteria_produk where id_kriteria_produk='".$id."'");
-			$h=mysql_fetch_array($q);
+			$q=mysqli_query($connect,"select * from kriteria_produk where id_kriteria_produk='".$id."'");
+			$h=mysqli_fetch_array($q);
 			$kode_kriteria_produk_tmp=$h['kode_kriteria_produk'];
-			if(mysql_num_rows(mysql_query("select * from kriteria_produk where kode_kriteria_produk='".$kode_kriteria_produk."' and kode_kriteria_produk<>'".$kode_kriteria_produk_tmp."'"))>0){
+			if(mysqli_num_rows(mysqli_query($connect,"select * from kriteria_produk where kode_kriteria_produk='".$kode_kriteria_produk."' and kode_kriteria_produk<>'".$kode_kriteria_produk_tmp."'"))>0){
 				$error='kode sudah terdaftar. Silahkan gunakan kode yang lain.';
 			}else{
 				$q="update kriteria_produk set kode_kriteria_produk='".$kode_kriteria_produk."', nama_kriteria_produk='".$nama_kriteria_produk."' where id_kriteria_produk='".$id."'";
-				mysql_query($q);
+				mysqli_query($connect,$q);
 				exit("<script>location.href='".$link_list."';</script>");
 			}
 		}
@@ -38,14 +38,14 @@ if(isset($_POST['save'])){
 	if(empty($_GET['action'])){$action='add';}else{$action=$_GET['action'];}
 	if($action=='edit'){
 		$id=$_GET['id'];
-		$q=mysql_query("select * from kriteria_produk where id_kriteria_produk='".$id."'");
-		$h=mysql_fetch_array($q);
+		$q=mysqli_query($connect,"select * from kriteria_produk where id_kriteria_produk='".$id."'");
+		$h=mysqli_fetch_array($q);
 		$kode_kriteria_produk=$h['kode_kriteria_produk'];
 		$nama_kriteria_produk=$h['nama_kriteria_produk'];
 	}
 	if($action=='delete'){
 		$id=$_GET['id'];
-		mysql_query("delete from kriteria_produk where id_kriteria_produk='".$id."'");
+		mysqli_query($connect,"delete from kriteria_produk where id_kriteria_produk='".$id."'");
 		exit("<script>location.href='".$link_list."';</script>");
 	}
 }

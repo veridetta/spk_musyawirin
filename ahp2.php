@@ -1,15 +1,14 @@
 <?php
-
-function ahp2_get_matrik_kriteria_produk($id_kriteria_produk){
+function ahp2_get_matrik_kriteria_produk($id_kriteria_produk, $con){
 	for($i=0;$i<count($id_kriteria_produk);$i++){
 		for($ii=0;$ii<count($id_kriteria_produk);$ii++){
 			if($i==$ii){
 				$matrik[$i][$ii]=1;
 			}else{
 				if($i < $ii){
-					$q=mysql_query("select nilai from nilai_kriteria_produk where id_kriteria_produk_1='".$id_kriteria_produk[$i]."' and id_kriteria_produk_2='".$id_kriteria_produk[$ii]."'");
-					if(mysql_num_rows($q)>0){
-						$h=mysql_fetch_array($q);
+					$q=mysqli_query($con,"select nilai from nilai_kriteria_produk where id_kriteria_produk_1='".$id_kriteria_produk[$i]."' and id_kriteria_produk_2='".$id_kriteria_produk[$ii]."'");
+					if(mysqli_num_rows($q)>0){
+						$h=mysqli_fetch_array($q);
 						$nilai=$h['nilai'];
 						$matrik[$i][$ii]=$nilai;
 						$matrik[$ii][$i]=round((1/$nilai),3);
@@ -30,9 +29,9 @@ function ahp2_get_matrik_produk($id_kriteria_produk, $id_produk){
 				$matrik[$i][$ii]=1;
 			}else{
 				if($i < $ii){
-					$q=mysql_query("select nilai from nilai_produk where id_kriteria_produk='".$id_produk."' and id_produk_1='".$id_produk[$i]."' and id_produk_2='".$id_produk[$ii]."'");
-					if(mysql_num_rows($q)>0){
-						$h=mysql_fetch_array($q);
+					$q=mysqli_query($connect,"select nilai from nilai_produk where id_kriteria_produk='".$id_produk."' and id_produk_1='".$id_produk[$i]."' and id_produk_2='".$id_produk[$ii]."'");
+					if(mysqli_num_rows($q)>0){
+						$h=mysqli_fetch_array($q);
 						$nilai=$h['nilai'];
 						$matrik[$i][$ii]=$nilai;
 						$matrik[$ii][$i]=round((1/$nilai),3);

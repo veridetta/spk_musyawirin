@@ -4,14 +4,14 @@ $link_list='?hal=data_produk';
 $link_update='?hal=update_produk';
 
 $q="select * from produk order by nama_produk";
-$q=mysql_query($q);
-if(mysql_num_rows($q) > 0){
-	while($h=mysql_fetch_array($q)){
+$q=mysqli_query($connect, $q);
+if(mysqli_num_rows($q) > 0){
+	while($h=mysqli_fetch_array($q)){
 		$no++;
 		$id=$h['id_produk'];
 		$allow_del=true;
-		if(mysql_num_rows(mysql_query("select * from nilai_produk where id_produk_1='".$h['id_produk']."' limit 0,1"))>0){$allow_del=false;}
-		if(mysql_num_rows(mysql_query("select * from nilai_produk where id_produk_2='".$h['id_produk']."' limit 0,1"))>0){$allow_del=false;}
+		if(mysqli_num_rows(mysqli_query($connect,"select * from nilai_produk where id_produk_1='".$h['id_produk']."' limit 0,1"))>0){$allow_del=false;}
+		if(mysqli_num_rows(mysqli_query($connect,"select * from nilai_produk where id_produk_2='".$h['id_produk']."' limit 0,1"))>0){$allow_del=false;}
 		if($allow_del){$disabled='';}else{$disabled='disabled';}
 		$daftar.='
 		  <tr>

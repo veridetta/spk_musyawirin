@@ -9,11 +9,11 @@ if(isset($_POST['login'])){
 	}
 	$username=$_POST['username'];
 	$password=md5($_POST['password']);
-	$q=mysql_query("SELECT * FROM admin WHERE username='".$username."' AND password='".$password."'");
-	if(mysql_num_rows($q)==0){
+	$q=mysqli_query($connect,"SELECT * FROM admin WHERE username='".$username."' AND password='".$password."'");
+	if(mysqli_num_rows($q)==0){
 		exit("<script>window.alert('Username dan password tidak cocok');window.history.back();</script>");
 	}
-	$h=mysql_fetch_array($q);
+	$h=mysqli_fetch_array($q);
 	$id_admin=$h['id_admin'];
 	$level=$h['level'];
 	

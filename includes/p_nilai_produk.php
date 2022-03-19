@@ -2,8 +2,8 @@
 $link_update='?hal=nilai_produk';
 
 $q="select * from produk order by kode_produk";
-$q=mysql_query($q);
-while($h=mysql_fetch_array($q)){
+$q=mysqli_query($connect, $q);
+while($h=mysqli_fetch_array($q)){
 	$produk[]=array($h['id_produk'],$h['kode_produk'],$h['nama_produk']);
 }
 
@@ -11,11 +11,12 @@ $id_kriteria_produk=$_POST['kriteria_produk'];
 
 if(isset($_POST['save'])){
 	$id_kriteria_produk=$_POST['kriteria_produk'];
-	mysql_query("delete from nilai_produk where id_kriteria_produk='".$id_kriteria_produk."'"); /* kosongkan tabel nilai_supplier berdasarkan kriteria */
+	//print_r($_POST);
+	mysqli_query($connect, "delete from nilai_produk where id_kriteria_produk='".$id_kriteria_produk."'"); /* kosongkan tabel nilai_supplier berdasarkan kriteria */
 	for($i=0;$i<count($produk);$i++){
 		for($ii=0;$ii<count($produk);$ii++){
 			if($i < $ii){
-				mysql_query("insert into nilai_produk(id_kriteria_produk,id_produk_1,id_produk_2,nilai) values('".$id_kriteria_produk."','".$produk[$i][0]."','".$produk[$ii][0]."','".$_POST['nilai_'.$produk[$i][0].'_'.$produk[$ii][0]]."')");
+				mysqli_query($connect, "insert into nilai_produk(id_kriteria_produk,id_produk_1,id_produk_2,nilai) values('".$id_kriteria_produk."','".$produk[$i][0]."','".$produk[$ii][0]."','".$_POST['nilai_'.$produk[$i][0].'_'.$produk[$ii][0]]."')");
 			}
 		}
 	}
@@ -23,18 +24,18 @@ if(isset($_POST['save'])){
 }
 if(isset($_POST['reset'])){
 	$id_kriteria_produk=$_POST['kriteria_produk'];
-	mysql_query("delete from nilai_produk where id_kriteria_produk='".$id_kriteria_produk."'"); /* kosongkan tabel nilai_produk berdasarkan kriteria */
+	mysqli_query($connect, "delete from nilai_produk where id_kriteria_produk='".$id_kriteria_produk."'"); /* kosongkan tabel nilai_produk berdasarkan kriteria */
 }
 
 for($i=0;$i<count($produk);$i++){
 	for($ii=0;$ii<count($produk);$ii++){
 		if($i < $ii){
-			$q=mysql_query("select nilai from nilai_produk where id_kriteria_produk='".$id_kriteria_produk."' and id_produk_1='".$produk[$i][0]."' and id_produk_2='".$produk[$ii][0]."'");
-			if(mysql_num_rows($q)>0){
-				$h=mysql_fetch_array($q);
+			$q=mysqli_query($connect, "select nilai from nilai_produk where id_kriteria_produk='".$id_kriteria_produk."' and id_produk_1='".$produk[$i][0]."' and id_produk_2='".$produk[$ii][0]."'");
+			if(mysqli_num_rows($q)>0){
+				$h=mysqli_fetch_array($q);
 				$nilai=$h['nilai'];
 			}else{
-				mysql_query("insert into nilai_produk(id_kriteria_produk,id_produk_1,id_produk_2,nilai) values('".$id_kriteria_produk."','".$produk[$i][0]."','".$produk[$ii][0]."','1')");
+				mysqli_query($connect, "insert into nilai_produk(id_kriteria_produk,id_produk_1,id_produk_2,nilai) values('".$id_kriteria_produk."','".$produk[$i][0]."','".$produk[$ii][0]."','1')");
 				$nilai=1;
 			}
 			$selected[$nilai]=' selected';
@@ -54,11 +55,7 @@ for($i=0;$i<count($produk);$i++){
 }
 
 $q="select * from kriteria_produk order by kode_kriteria_produk";
-$q=mysql_query($q);
-while($h=mysql_fetch_array($q)){
-	if($h['id_kriteria_produk']==$id_kriteria_produk){$s=' selected';}else{$s='';}
-	$list_kriteria_produk.='<option value="'.$h['id_kriteria_produk'].'"'.$s.'>'.$h['kode_kriteria_produk'].' - '.$h['nama_kriteria_produk'].'</option>';
-}
+$q=mysqli_query($connect, $q);
 
 ?>
 <script language="javascript">
@@ -78,7 +75,15 @@ function ResetConfirm(){
 	<tbody>
 		<tr>
 			<td width="100">Kriteria</td>
-			<td><select name="kriteria_produk" class="medium m-wrap" onchange="submit()"><?php echo $list_kriteria_produk;?></select></td>
+			<td><select name="kriteria_produk" class="medium m-wrap" onchange="submit()">
+				<option>Pilih Kriteria : </option>
+				<?php
+				while($h=mysqli_fetch_array($q)){
+					if($h['id_kriteria_produk']==$id_kriteria_produk){$s=' selected';}else{$s='';}
+					echo '<option value="'.$h['id_kriteria_produk'].'"'.$s.'>'.$h['kode_kriteria_produk'].' - '.$h['nama_kriteria_produk'].'</option>';
+				}
+				?>
+			</select></td>
 		</tr>
 	</tbody>
 </table>

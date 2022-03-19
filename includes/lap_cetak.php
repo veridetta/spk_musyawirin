@@ -6,13 +6,13 @@ require_once '../config.php';
 
 
 $q="select * from kriteria_produk order by kode_kriteria_produk";
-$q=mysql_query($q);
-while($h=mysql_fetch_array($q)){
+$q=mysqli_query($connect, $q);
+while($h=mysqli_fetch_array($q)){
 	$kriteria_produk[]=array($h['id_kriteria_produk'],$h['kode_kriteria_produk'],$h['nama_kriteria_produk']);
 }
 $q="select * from produk order by kode_produk";
-$q=mysql_query($q);
-while($h=mysql_fetch_array($q)){
+$q=mysqli_query($connect, $q);
+while($h=mysqli_fetch_array($q)){
 	$produk[]=array($h['id_produk'],$h['kode_produk'],$h['nama_produk']);
 }
 
@@ -20,7 +20,7 @@ while($h=mysql_fetch_array($q)){
 for($i=0;$i<count($kriteria_produk);$i++){
 	$id_kriteria_produk[]=$kriteria_produk[$i][0];
 }
-$matrik_kriteria_produk = ahp_get_matrik_kriteria_produk($id_kriteria_produk);
+$matrik_kriteria_produk = ahp_get_matrik_kriteria_produk($id_kriteria_produk,$connect);
 $jumlah_kolom = ahp_get_jumlah_kolom($matrik_kriteria_produk);
 $matrik_normalisasi = ahp_get_normalisasi($matrik_kriteria_produk, $jumlah_kolom);
 $eigen_kriteria_produk = ahp_get_eigen($matrik_normalisasi);
@@ -29,7 +29,7 @@ for($i=0;$i<count($produk);$i++){
 	$id_produk[]=$produk[$i][0];
 }
 for($i=0;$i<count($kriteria_produk);$i++){
-	$matrik_produk = ahp_get_matrik_produk($kriteria_produk[$i][0], $id_produk);
+	$matrik_produk = ahp_get_matrik_produk($kriteria_produk[$i][0], $id_produk,$connect);
 	$jumlah_kolom_produk = ahp_get_jumlah_kolom($matrik_produk);
 	$matrik_normalisasi_produk = ahp_get_normalisasi($matrik_produk, $jumlah_kolom_produk);
 	$eigen_produk[$i] = ahp_get_eigen($matrik_normalisasi_produk);

@@ -3,20 +3,21 @@
 require_once ( 'ahp.php' );
 
 $q="select * from kriteria_produk order by kode_kriteria_produk";
-$q=mysql_query($q);
-while($h=mysql_fetch_array($q)){
+$q=mysqli_query($connect, $q);
+while($h=mysqli_fetch_array($q)){
 	$kriteria_produk[]=array($h['id_kriteria_produk'],$h['kode_kriteria_produk'],$h['nama_kriteria_produk']);
 }
 $q="select * from produk order by kode_produk";
-$q=mysql_query($q);
-while($h=mysql_fetch_array($q)){
+$q=mysqli_query($connect, $q);
+while($h=mysqli_fetch_array($q)){
 	$produk[]=array($h['id_produk'],$h['kode_produk'],$h['nama_produk']);
 }
 
 for($i=0;$i<count($kriteria_produk);$i++){
 	$id_kriteria_produk[]=$kriteria_produk[$i][0];
 }
-$matrik_kriteria_produk = ahp_get_matrik_kriteria_produk($id_kriteria_produk);
+//-------------1. Matrik Kriteria Produk
+$matrik_kriteria_produk = ahp_get_matrik_kriteria_produk($id_kriteria_produk,$connect);
 $jumlah_kolom = ahp_get_jumlah_kolom($matrik_kriteria_produk);
 $matrik_normalisasi = ahp_get_normalisasi($matrik_kriteria_produk, $jumlah_kolom);
 $eigen_kriteria_produk = ahp_get_eigen($matrik_normalisasi);
@@ -25,12 +26,14 @@ for($i=0;$i<count($produk);$i++){
 	$id_produk[]=$produk[$i][0];
 }
 for($i=0;$i<count($kriteria_produk);$i++){
-	$matrik_produk = ahp_get_matrik_produk($kriteria_produk[$i][0], $id_produk);
+	//1------------
+	$matrik_produk = ahp_get_matrik_produk($kriteria_produk[$i][0], $id_produk,$connect);
 	$jumlah_kolom_produk = ahp_get_jumlah_kolom($matrik_produk);
+	//2--------------
 	$matrik_normalisasi_produk = ahp_get_normalisasi($matrik_produk, $jumlah_kolom_produk);
+	//3----------------------
 	$eigen_produk[$i] = ahp_get_eigen($matrik_normalisasi_produk);
 }
-
 $nilai_to_sort = array();
 
 for($i=0;$i<count($produk);$i++){
@@ -42,7 +45,15 @@ for($i=0;$i<count($produk);$i++){
 	$nilai_global[$i] = $nilai;
 	$nilai_to_sort[] = array($nilai, $produk[$i][0]);
 }
-
+//echo "<br> Jumlah Kolom ";
+//print_r($jumlah_kolom_produk);
+//echo "<br>";
+//MATRIK PRODUK
+//print_r($matrik_normalisasi_produk);
+//echo "<br>";
+//------------1
+//print_r($eigen_produk);
+//
 sort($nilai_to_sort);
 for($i=0;$i<count($nilai_to_sort);$i++){
 	$ranking[$nilai_to_sort[$i][1]]=(count($nilai_to_sort) - $i);
@@ -146,11 +157,11 @@ window.open('includes/lap_cetak.php','page','toolbar=0,scrollbars=1,location=0,s
 <table class="table table-striped table-hover table-bordered">
 	<thead>
 		<tr>
-			<th colspan="50">EIGEN KRITERIA DAN produk </th>
+			<th colspan="50">EIGEN KRITERIA DAN SISWA </th>
 		</tr>
 		<tr>
 			<th width="40">No</th>
-			<th>produk</th>
+			<th>Siswa</th>
 			<?php
 			for($i=0;$i<count($kriteria_produk);$i++){
 				echo '<th>'.$kriteria_produk[$i][1].'</th>';
@@ -174,14 +185,15 @@ window.open('includes/lap_cetak.php','page','toolbar=0,scrollbars=1,location=0,s
 		</tr>
 		<?php
 		for($i=0;$i<count($produk);$i++){
+			//MISSED
 			echo '
 				<tr>
 					<td>'.($i+1).'</td>
 					<td>'.$produk[$i][1].' - '.$produk[$i][2].'</td>
 			';
-			for($ii=0;$ii<count($kriteria_produk);$ii++){
+			for($iii=0;$iii<count($kriteria_produk);$iii++){
 				echo '
-						<td>'.$eigen_produk[$ii][$i].'</td>
+						<td>'.$eigen_produk[$iii][$i].'</td>
 				';
 				
 			}

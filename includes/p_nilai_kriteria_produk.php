@@ -2,17 +2,17 @@
 $link_update='?hal=nilai_kriteria_produk';
 
 $q="select * from kriteria_produk order by kode_kriteria_produk";
-$q=mysql_query($q);
-while($h=mysql_fetch_array($q)){
+$q=mysqli_query($connect,$q);
+while($h=mysqli_fetch_array($q)){
 	$kriteria_produk[]=array($h['id_kriteria_produk'],$h['kode_kriteria_produk'],$h['nama_kriteria_produk']);
 }
 
 if(isset($_POST['save'])){
-	mysql_query("truncate table nilai_kriteria_produk"); /* kosongkan tabel nilai_kriteria_produk */
+	mysqli_query($connect,"truncate table nilai_kriteria_produk"); /* kosongkan tabel nilai_kriteria_produk */
 	for($i=0;$i<count($kriteria_produk);$i++){
 		for($ii=0;$ii<count($kriteria_produk);$ii++){
 			if($i < $ii){
-				mysql_query("insert into nilai_kriteria_produk(id_kriteria_produk_1,id_kriteria_produk_2,nilai) values('".$kriteria_produk[$i][0]."','".$kriteria_produk[$ii][0]."','".$_POST['nilai_'.$kriteria_produk[$i][0].'_'.$kriteria_produk[$ii][0]]."')");
+				mysqli_query($connect,"insert into nilai_kriteria_produk(id_kriteria_produk_1,id_kriteria_produk_2,nilai) values('".$kriteria_produk[$i][0]."','".$kriteria_produk[$ii][0]."','".$_POST['nilai_'.$kriteria_produk[$i][0].'_'.$kriteria_produk[$ii][0]]."')");
 			}
 		}
 	}
@@ -20,11 +20,12 @@ if(isset($_POST['save'])){
 }
 if(isset($_POST['check'])){
 	require_once ( 'ahp2.php' );
+	//print_r($_POST);
 	for($i=0;$i<count($kriteria_produk);$i++){
 		$id_kriteria_produk[]=$kriteria_produk[$i][0];
 	}
 	
-	$matrik_kriteria_produk = ahp2_get_matrik_kriteria_produk($id_kriteria_produk);
+	$matrik_kriteria_produk = ahp2_get_matrik_kriteria_produk($id_kriteria_produk,$connect);
 	$jumlah_kolom = ahp2_get_jumlah_kolom($matrik_kriteria_produk);
 	$matrik_normalisasi = ahp2_get_normalisasi($matrik_kriteria_produk, $jumlah_kolom);
 	$eigen = ahp2_get_eigen($matrik_normalisasi);
@@ -39,28 +40,34 @@ if(isset($_POST['check'])){
 	
 }
 if(isset($_POST['reset'])){
-	mysql_query("truncate table nilai_kriteria_produk"); /* kosongkan tabel nilai_kriteria */
+	mysqli_query($connect,"truncate table nilai_kriteria_produk"); /* kosongkan tabel nilai_kriteria */
 }
 
 for($i=0;$i<count($kriteria_produk);$i++){
 	for($ii=0;$ii<count($kriteria_produk);$ii++){
 		if($i < $ii){
-			$q=mysql_query("select nilai from nilai_kriteria_produk where id_kriteria_produk_1='".$kriteria_produk[$i][0]."' and id_kriteria_produk_2='".$kriteria_produk[$ii][0]."'");
-			if(mysql_num_rows($q)>0){
-				$h=mysql_fetch_array($q);
+			$q=mysqli_query($connect,"select nilai from nilai_kriteria_produk where id_kriteria_produk_1='".$kriteria_produk[$i][0]."' and id_kriteria_produk_2='".$kriteria_produk[$ii][0]."'");
+			if(mysqli_num_rows($q)>0){
+				$h=mysqli_fetch_array($q);
 				$nilai=$h['nilai'];
 			}else{
-				mysql_query("insert into nilai_kriteria_produk(id_kriteria_produk_1,id_kriteria_produk_2,nilai) values('".$kriteria_produk[$i][0]."','".$kriteria_produk[$ii][0]."','1')");
+				mysqli_query($connect,"insert into nilai_kriteria_produk(id_kriteria_produk_1,id_kriteria_produk_2,nilai) values('".$kriteria_produk[$i][0]."','".$kriteria_produk[$ii][0]."','1')");
 				$nilai=1;
 			}
 			$row=count($kriteria_produk)-1;
 			$selected[$nilai]=' selected';
-			
+			$val_sementara="";
+			if(isset($_POST['check'])){
+				$val_sementara=$_POST['nilai_'.$kriteria_produk[$i][0].'_'.$kriteria_produk[$ii][0]];
+				//echo 'nilai_'.$kriteria_produk[$i][0].'_'.$kriteria_produk[$ii][0];
+			}else{
+				$val_sementara=$nilai;
+			}
 			$daftar.='
 			  <tr>
 				<td align="right">'.$kriteria_produk[$i][1].' - '.$kriteria_produk[$i][2].'</td>
 				<td align="center">
-				<input type="text" name="nilai_'.$kriteria_produk[$i][0].'_'.$kriteria_produk[$ii][0].'" value='.$nilai.'>
+				<input type="text" name="nilai_'.$kriteria_produk[$i][0].'_'.$kriteria_produk[$ii][0].'" value='.$val_sementara.'>
 				
 				</td>
 				<td>'.$kriteria_produk[$ii][1].' - '.$kriteria_produk[$ii][2].'</td>

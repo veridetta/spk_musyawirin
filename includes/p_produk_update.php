@@ -12,23 +12,23 @@ if(isset($_POST['save'])){
 		$error='Masih ada beberapa kesalahan. Silahkan periksa lagi form di bawah ini.';
 	}else{
 		if($action=='add'){
-			if(mysql_num_rows(mysql_query("select * from produk where kode_produk='".$kode_produk."'"))>0){
+			if(mysqli_num_rows(mysqli_query($connect,"select * from produk where kode_produk='".$kode_produk."'"))>0){
 				$error='kode sudah terdaftar. Silahkan gunakan npwp yang lain.';
 			}else{
 				$q="insert into produk(kode_produk, nama_produk) values('".$kode_produk."', '".$nama_produk."')";
-				mysql_query($q);
+				mysqli_query($connect,$q);
 				exit("<script>location.href='".$link_list."';</script>");
 			}
 		}
 		if($action=='edit'){
-			$q=mysql_query("select * from produk where id_produk='".$id."'");
-			$h=mysql_fetch_array($q);
+			$q=mysqli_query($connect,"select * from produk where id_produk='".$id."'");
+			$h=mysqli_fetch_array($q);
 			$kode_produk_tmp=$h['kode_produk'];
-			if(mysql_num_rows(mysql_query("select * from produk where kode_produk='".$kode_produk."' and kode_produk<>'".$kode_produk_tmp."'"))>0){
+			if(mysqli_num_rows(mysqli_query($connect,"select * from produk where kode_produk='".$kode_produk."' and kode_produk<>'".$kode_produk_tmp."'"))>0){
 				$error='kode sudah terdaftar. Silahkan gunakan kode yang lain.';
 			}else{
 				$q="update produk set kode_produk='".$kode_produk."', nama_produk='".$nama_produk."' where id_produk='".$id."'";
-				mysql_query($q);
+				mysqli_query($connect,$q);
 				exit("<script>location.href='".$link_list."';</script>");
 			}
 		}
@@ -38,14 +38,14 @@ if(isset($_POST['save'])){
 	if(empty($_GET['action'])){$action='add';}else{$action=$_GET['action'];}
 	if($action=='edit'){
 		$id=$_GET['id'];
-		$q=mysql_query("select * from produk where id_produk='".$id."'");
-		$h=mysql_fetch_array($q);
+		$q=mysqli_query($connect,"select * from produk where id_produk='".$id."'");
+		$h=mysqli_fetch_array($q);
 		$npwp=$h['kode_produk'];
 		$nama=$h['mer_produk'];
 	}
 	if($action=='delete'){
 		$id=$_GET['id'];
-		mysql_query("delete from produk where id_produk='".$id."'");
+		mysqli_query($connect,"delete from produk where id_produk='".$id."'");
 		exit("<script>location.href='".$link_list."';</script>");
 	}
 }

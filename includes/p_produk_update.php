@@ -53,7 +53,7 @@ if(isset($_POST['save'])){
 
 ?>
 
-<h3 class="p2">Update Data produk </h3>
+<h3 class="p2">Update Data Siswa </h3>
 
 <form action="<?php echo $link_update;?>" name="" method="post" enctype="multipart/form-data">
 <input name="id" type="hidden" value="<?php echo $id;?>">
@@ -70,12 +70,12 @@ if(!empty($error)){
 
 <table width="100%" border="0" cellspacing="4" cellpadding="4" class="tabel_reg">
   <tr>
-	<td width="120">Kode produk <span class="required">*</span> </td>
-	<td><input name="kode_produk" type="text" size="40" value="<?php echo $kode_produk;?>" class="m-wrap large"></td>
+	<td width="120">Kode Siswa <span class="required">*</span> </td>
+	<td><input name="kode_produk" type="text" size="40" value="<?php echo $_GET['kode'];?>" class="m-wrap large"></td>
   </tr>
   <tr>
-	<td>Nama produk <span class="required">*</span> </td>
-	<td><input name="nama_produk" type="text" size="40" value="<?php echo $nama_produk;?>" class="m-wrap large"></td>
+	<td>Nama  Siswa <span class="required">*</span> </td>
+	<td><input name="nama_produk" type="text" size="40" value="<?php echo $_GET['nama'];?>" class="m-wrap large"></td>
   </tr>
  
   <tr>

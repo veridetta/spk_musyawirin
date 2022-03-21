@@ -18,7 +18,7 @@ if(mysqli_num_rows($q) > 0){
 			<td valign="top">'.$no.'</td>
 			<td valign="top">'.$h['kode_produk'].'</td>
 			<td valign="top">'.$h['nama_produk'].'</td>
-			<td align="center" valign="top"><a href="'.$link_update.'&amp;id='.$id.'&amp;action=edit" class="btn"><i class="icon-edit"></i></a> <a href="#" onclick="DeleteConfirm(\''.$link_update.'&amp;id='.$id.'&amp;action=delete\');return(false);" class="btn '.$disabled.'"><i class="icon-trash"></i></a></td>
+			<td align="center" valign="top"><a href="'.$link_update.'&amp;id='.$id.'&amp;action=edit&&kode='.$h['kode_produk'].'&&nama='.$h['nama_produk'].'" class="btn"><i class="icon-edit"></i></a> <a href="#" onclick="DeleteConfirm(\''.$link_update.'&amp;id='.$id.'&amp;action=delete\');return(false);" class="btn '.$disabled.'"><i class="icon-trash"></i></a></td>
 		  </tr>
 		';
 	}

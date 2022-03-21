@@ -66,7 +66,7 @@ for($i=0;$i<count($nilai_to_sort);$i++){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Hasil Seleksi produk</title>
+    <title>Hasil Seleksi Nilai Siswa</title>
     <meta name="description" content="" />
     <meta name="keywords" content="" />
     <meta charset="utf-8">
@@ -88,7 +88,7 @@ for($i=0;$i<count($nilai_to_sort);$i++){
 
 
 <body onLoad="window.print()" id="page2">
-<h3 class="p2">Laporan Hasil Seleksi produk Pada Bulan <?php $tanggal=date('F');
+<h3 class="p2">Laporan Hasil Seleksi Nilai Siswa;
 	echo $tanggal;
 	?><br></h3>
 
@@ -97,7 +97,7 @@ for($i=0;$i<count($nilai_to_sort);$i++){
 <table class="table table-striped table-hover table-bordered">
 	<thead>
 		<tr>
-			<th colspan="50">Hasil Seleksi produk </th>
+			<th colspan="50">Hasil Seleksi Nilai Siswa </th>
 		</tr>
 		<tr>
 			<th width="40">No</th>
@@ -148,7 +148,7 @@ for($i=0;$i<count($nilai_to_sort);$i++){
 <table width="100%" border="1" cellpadding="2" cellspacing="1">
   <tr>
     <td width="78%" height="100">&nbsp;</td>
-    <td width="22%"><p>Cirebon, <?php $tanggal=date('d  F  Y');
+    <td width="22%"><p>Cirebon, <?php setlocale(LC_ALL,'id_ID');$tanggal=date('d  F  Y');
 	echo $tanggal;
 	?></td>
   </tr>

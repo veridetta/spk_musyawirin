@@ -39,12 +39,13 @@ for($i=0;$i<count($produk);$i++){
 				$nilai=1;
 			}
 			$selected[$nilai]=' selected';
-			
+
 			$daftar.='
 			  <tr>
 				<td align="right">'.$produk[$i][1].' - '.$produk[$i][2].'</td>
 				<td align="center">
-				<input type="text" name="nilai_'.$produk[$i][0].'_'.$produk[$ii][0].'" value='.$nilai.'>
+				
+				<input type="number" min="0.111" max="9" step="0.001" name="nilai_'.$produk[$i][0].'_'.$produk[$ii][0].'" value='.$nilai.'>
 				</td>
 				<td>'.$produk[$ii][1].' - '.$produk[$ii][2].'</td>
 			  </tr>

@@ -88,9 +88,7 @@ for($i=0;$i<count($nilai_to_sort);$i++){
 
 
 <body onLoad="window.print()" id="page2">
-<h3 class="p2">Laporan Hasil Seleksi Nilai Siswa;
-	echo $tanggal;
-	?><br></h3>
+<h3 class="p2">Laporan Hasil Seleksi Nilai Siswa;<br></h3>
 
 
 

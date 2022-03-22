@@ -67,7 +67,7 @@ for($i=0;$i<count($kriteria_produk);$i++){
 			  <tr>
 				<td align="right">'.$kriteria_produk[$i][1].' - '.$kriteria_produk[$i][2].'</td>
 				<td align="center">
-				<input type="text" name="nilai_'.$kriteria_produk[$i][0].'_'.$kriteria_produk[$ii][0].'" value='.$val_sementara.'>
+				<input type="text" min="0.111" max="9" step="0.001" name="nilai_'.$kriteria_produk[$i][0].'_'.$kriteria_produk[$ii][0].'" value='.$val_sementara.'>
 				
 				</td>
 				<td>'.$kriteria_produk[$ii][1].' - '.$kriteria_produk[$ii][2].'</td>
